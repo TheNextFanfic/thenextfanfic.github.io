@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Next Fanfic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="top-header">
+        <h1>The Next Fanfic</h1>
+
+        <!-- Ícone de perfil -->
+        <button class="profile-btn" id="profileBtn">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+            </svg>
+        </button>
+    </header>
+
+    <main>
+        <section class="fanfic-card">
+            <h2>Título da Fanfic</h2>
+            <p class="autor">por Autor Desconhecido</p>
+            <p class="resumo">
+                Esta é uma breve descrição da fanfic.
+            </p>
+            <button class="ler-btn" id="lerBtn">Ler Fanfic</button>
+        </section>
+    </main>
+
+    <!-- Abas inferiores -->
+    <nav class="bottom-tabs">
+        <!-- Livro -->
+        <button class="tab active" data-tab="home">
+            <svg viewBox="0 0 24 24">
+                <path d="M4 3h12a2 2 0 0 1 2 2v14a1 1 0 0 1-1 1H6a2 2 0 0 0-2 2V3z"/>
+                <path d="M6 3v18"/>
+            </svg>
+        </button>
+
+        <!-- Lupa (meio) -->
+        <button class="tab" data-tab="buscar">
+            <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7"/>
+                <line x1="16.5" y1="16.5" x2="21" y2="21"/>
+            </svg>
+        </button>
+
+        <!-- Lápis (último) -->
+        <button class="tab" data-tab="escrever">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25z"/>
+                <path d="M14.06 4.19l3.75 3.75"/>
+            </svg>
+        </button>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
