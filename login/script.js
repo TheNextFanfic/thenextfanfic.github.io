@@ -3,6 +3,82 @@ const showPassword = document.getElementById('showPassword');
 const passwordInput = document.getElementById('password');
 const backBtn = document.querySelector('.back-btn');
 
+// Função para adicionar animação de clique em qualquer elemento
+function addClickAnimation(element) {
+    if (!element) return;
+    
+    element.addEventListener('mousedown', function() {
+        this.style.opacity = '0.7';
+        this.style.transform = 'scale(0.98)';
+        this.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    });
+    
+    element.addEventListener('mouseup', function() {
+        this.style.opacity = '';
+        this.style.transform = '';
+        this.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    });
+    
+    element.addEventListener('mouseleave', function() {
+        this.style.opacity = '';
+        this.style.transform = '';
+    });
+    
+    // Para dispositivos touch
+    element.addEventListener('touchstart', function() {
+        this.style.opacity = '0.7';
+        this.style.transform = 'scale(0.98)';
+        this.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    });
+    
+    element.addEventListener('touchend', function() {
+        this.style.opacity = '';
+        this.style.transform = '';
+        this.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    });
+    
+    element.addEventListener('touchcancel', function() {
+        this.style.opacity = '';
+        this.style.transform = '';
+    });
+}
+
+// Adiciona animação de clique a todos os botões e links clicáveis
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleciona todos os elementos clicáveis
+    const clickableElements = document.querySelectorAll(
+        'button, .back-btn, .login-btn, .show-password, .forgot-password, ' +
+        '.register-link a, .remember input, input[type="submit"], a[href]'
+    );
+    
+    // Adiciona animação a cada elemento
+    clickableElements.forEach(element => {
+        addClickAnimation(element);
+    });
+    
+    // Adiciona animação específica para o botão de mostrar senha
+    addClickAnimation(showPassword);
+    
+    // Adiciona animação específica para o botão de voltar
+    addClickAnimation(backBtn);
+    
+    // Adiciona animação específica para o botão de login
+    const loginBtn = document.querySelector('.login-btn');
+    addClickAnimation(loginBtn);
+    
+    // Adiciona animação para o checkbox "Lembrar-me"
+    const rememberCheckbox = document.querySelector('.remember');
+    addClickAnimation(rememberCheckbox);
+    
+    // Adiciona animação para o link "Esqueci a senha"
+    const forgotPasswordLink = document.querySelector('.forgot-password');
+    addClickAnimation(forgotPasswordLink);
+    
+    // Adiciona animação para o link "Cadastre-se"
+    const registerLink = document.querySelector('.register-link a');
+    addClickAnimation(registerLink);
+});
+
 showPassword.addEventListener('click', function() {
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
     passwordInput.setAttribute('type', type);
@@ -205,5 +281,18 @@ document.querySelectorAll('input').forEach(input => {
         setTimeout(() => {
             this.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 300);
+    });
+});
+
+// Adiciona também animação para os botões de foco
+document.querySelectorAll('button, .back-btn, .login-btn, .show-password').forEach(btn => {
+    btn.addEventListener('focus', function() {
+        this.style.transform = 'scale(1.02)';
+        this.style.boxShadow = '0 0 0 3px rgba(242, 198, 204, 0.3)';
+    });
+    
+    btn.addEventListener('blur', function() {
+        this.style.transform = '';
+        this.style.boxShadow = '';
     });
 });
