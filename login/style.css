@@ -6,60 +6,47 @@
 }
 
 body {
-    background: linear-gradient(135deg, #0f0c14 0%, #1b1622 100%);
+    background-color: #0f0c14;
     color: #f5e4e7;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    overflow: hidden; /* Remove rolagem */
+    flex-direction: column;
+    overflow: hidden;
 }
 
-.login-container {
-    width: 100%;
-    max-width: 420px;
-    max-height: 95vh; /* Limita altura máxima */
-    overflow-y: auto; /* Permite rolagem apenas dentro do container se necessário */
-    overflow-x: hidden; /* Remove rolagem horizontal */
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: #f2c6cc transparent; /* Firefox */
+button {
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+    outline: none;
 }
 
-/* Estiliza scrollbar para Webkit (Chrome, Safari, Edge) */
-.login-container::-webkit-scrollbar {
-    width: 6px;
-}
-
-.login-container::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.login-container::-webkit-scrollbar-thumb {
-    background: #f2c6cc;
-    border-radius: 10px;
-}
-
-.login-container::-webkit-scrollbar-thumb:hover {
-    background: #e6aeb5;
-}
-
-/* Cabeçalho do login */
-.login-header {
+.top-header {
+    position: relative;
+    background-color: #f2c6cc;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
-    position: sticky;
-    top: 0;
-    background: linear-gradient(135deg, #0f0c14 0%, #1b1622 100%);
-    padding: 10px 0;
-    z-index: 10;
+    justify-content: space-between;
+    min-height: 60px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.top-header h1 {
+    font-size: 1.7rem;
+    color: #3a1f24;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 60px);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .back-btn {
-    background: rgba(242, 198, 204, 0.1);
+    background: rgba(59, 31, 36, 0.1);
     border: none;
-    color: #f2c6cc;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -67,39 +54,52 @@ body {
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    margin-right: 15px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    flex-shrink: 0; /* Evita que o botão diminua */
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+    z-index: 2;
 }
 
-.back-btn:hover {
-    background: rgba(242, 198, 204, 0.2);
-    transform: translateX(-3px);
+.back-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke: #3a1f24;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-.back-btn i {
-    font-size: 1.2rem;
+.back-btn:active {
+    opacity: 0.6;
 }
 
-.login-header h1 {
-    font-size: 1.8rem;
-    color: #f2c6cc;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Cartão de login */
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .login-card {
-    background-color: rgba(27, 22, 34, 0.9);
-    border-radius: 20px;
+    background-color: #1b1622;
+    border-radius: 16px;
     padding: 30px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    box-shadow: 0 8px 25px rgba(230, 174, 181, 0.1);
     border: 1px solid rgba(230, 174, 181, 0.1);
-    backdrop-filter: blur(10px);
-    margin-bottom: 20px; /* Espaço no final */
+    margin-bottom: 20px;
 }
 
 .logo {
@@ -124,7 +124,6 @@ body {
     font-weight: 600;
 }
 
-/* Formulário */
 .login-form {
     margin-bottom: 20px;
 }
@@ -184,14 +183,13 @@ body {
     font-size: 1rem;
     cursor: pointer;
     padding: 5px;
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
-.show-password:hover {
-    color: #f2c6cc;
+.show-password:active {
+    opacity: 0.6;
 }
 
-/* Opções */
 .options {
     display: flex;
     justify-content: space-between;
@@ -205,6 +203,11 @@ body {
     display: flex;
     align-items: center;
     cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.remember:active {
+    opacity: 0.7;
 }
 
 .remember input {
@@ -224,15 +227,13 @@ body {
     color: #f2c6cc;
     text-decoration: none;
     font-size: 0.9rem;
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
-.forgot-password:hover {
-    text-decoration: underline;
-    color: #e6aeb5;
+.forgot-password:active {
+    opacity: 0.6;
 }
 
-/* Botão de login */
 .login-btn {
     width: 100%;
     padding: 16px;
@@ -243,7 +244,7 @@ body {
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -251,16 +252,15 @@ body {
     margin-bottom: 25px;
 }
 
-.login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 7px 20px rgba(230, 174, 181, 0.4);
-}
-
 .login-btn:active {
-    transform: translateY(0);
+    opacity: 0.7;
 }
 
-/* Link para registro */
+.login-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .register-link {
     text-align: center;
     color: #e6aeb5;
@@ -273,20 +273,82 @@ body {
     color: #f2c6cc;
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
-.register-link a:hover {
-    text-decoration: underline;
-    color: #e6aeb5;
+.register-link a:active {
+    opacity: 0.6;
 }
 
-/* Responsividade */
-@media (max-height: 700px) {
-    .login-container {
-        max-height: 90vh;
+.error-message, .success-message {
+    background: rgba(27, 22, 34, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: fadeIn 0.3s ease-out;
+    border: 1px solid;
+    width: 100%;
+}
+
+.error-message {
+    border-color: rgba(255, 107, 107, 0.3);
+    color: #ff6b6b;
+}
+
+.success-message {
+    border-color: rgba(107, 255, 167, 0.3);
+    color: #6bffa7;
+}
+
+.error-message i, .success-message i {
+    font-size: 1.2rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@media (max-width: 480px) {
+    .top-header {
+        padding: 12px 16px;
     }
     
+    .top-header h1 {
+        font-size: 1.4rem;
+    }
+    
+    .login-card {
+        padding: 25px 20px;
+    }
+    
+    .logo h2 {
+        font-size: 1.4rem;
+    }
+    
+    .options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
+
+@media (max-height: 700px) {
     .login-card {
         padding: 20px;
     }
@@ -318,75 +380,4 @@ body {
         padding: 14px;
         margin-bottom: 20px;
     }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 15px;
-    }
-    
-    .login-card {
-        padding: 25px 20px;
-    }
-    
-    .login-header h1 {
-        font-size: 1.6rem;
-    }
-    
-    .logo h2 {
-        font-size: 1.4rem;
-    }
-    
-    .options {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-}
-
-@media (max-width: 360px) {
-    body {
-        padding: 10px;
-    }
-    
-    .login-card {
-        padding: 20px 15px;
-    }
-    
-    .login-header h1 {
-        font-size: 1.4rem;
-    }
-    
-    .back-btn {
-        width: 35px;
-        height: 35px;
-        margin-right: 10px;
-    }
-}
-
-/* Animações */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.login-card {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Melhorias para acessibilidade */
-input:focus, button:focus {
-    outline: 2px solid #f2c6cc;
-    outline-offset: 2px;
-}
-
-/* Remove efeito de seleção em mobile */
-.login-btn:active, .back-btn:active {
-    transform: scale(0.98);
 }

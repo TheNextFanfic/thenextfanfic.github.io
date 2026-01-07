@@ -2,68 +2,74 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Login - The Next Fanfic</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <a href="../" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-            <h1>The Next Fanfic</h1>
-        </div>
-        
-        <div class="login-card">
-            <div class="logo">
-                <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="8" r="4"/>
-                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-                </svg>
-                <h2>Entrar na sua conta</h2>
+    <header class="top-header">
+        <a href="../" class="back-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M15 6l-6 6 6 6"/>
+            </svg>
+        </a>
+        <h1>The Next Fanfic</h1>
+    </header>
+    
+    <main>
+        <div class="login-container">
+            <div class="login-card">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                    </svg>
+                    <h2>Entrar na sua conta</h2>
+                </div>
+                
+                <form id="loginForm" class="login-form">
+                    <div class="input-group">
+                        <label for="email">E-mail ou Usuário</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="email" placeholder="seu@email.com" required
+                                   autocapitalize="none" autocorrect="off" inputmode="email">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="••••••••" required
+                                   autocapitalize="none" autocorrect="off">
+                            <button type="button" class="show-password" id="showPassword" aria-label="Mostrar senha">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="options">
+                        <label class="remember">
+                            <input type="checkbox" id="remember">
+                            <span>Lembrar-me</span>
+                        </label>
+                        <a href="#" class="forgot-password">Esqueci a senha</a>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Entrar
+                    </button>
+                    
+                    <div class="register-link">
+                        Não tem uma conta? <a href="/register/">Cadastre-se</a>
+                    </div>
+                </form>
             </div>
-            
-            <form id="loginForm" class="login-form">
-                <div class="input-group">
-                    <label for="email">E-mail ou Usuário</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="email" placeholder="seu@email.com" required>
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label for="password">Senha</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" placeholder="••••••••" required>
-                        <button type="button" class="show-password" id="showPassword">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="options">
-                    <label class="remember">
-                        <input type="checkbox" id="remember">
-                        <span>Lembrar-me</span>
-                    </label>
-                    <a href="#" class="forgot-password">Esqueci a senha</a>
-                </div>
-                
-                <button type="submit" class="login-btn">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Entrar
-                </button>
-                
-                <div class="register-link">
-                    Não tem uma conta? <a href="/register/">Cadastre-se</a>
-                </div>
-            </form>
         </div>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
