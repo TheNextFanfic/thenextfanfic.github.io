@@ -3,7 +3,6 @@ const loginForm = document.getElementById('loginForm');
 const showPassword = document.getElementById('showPassword');
 const passwordInput = document.getElementById('password');
 const backBtn = document.querySelector('.back-btn');
-const socialButtons = document.querySelectorAll('.social-btn');
 
 // Alternar visibilidade da senha
 showPassword.addEventListener('click', function() {
@@ -51,7 +50,13 @@ loginForm.addEventListener('submit', function(e) {
         return;
     }
     
-    // Simulação de login (substitua por API real)
+    // Validação de email simples
+    if (!email.includes('@') && !/^[a-zA-Z0-9_]{3,}$/.test(email)) {
+        showError('Por favor, insira um e-mail válido ou nome de usuário (mínimo 3 caracteres)');
+        return;
+    }
+    
+    // Simulação de login
     simulateLogin(email, password, remember);
 });
 
@@ -63,22 +68,41 @@ function simulateLogin(email, password, remember) {
     loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
     loginBtn.disabled = true;
     
+    // Desabilitar outros elementos do formulário
+    const formElements = loginForm.elements;
+    for (let i = 0; i < formElements.length; i++) {
+        formElements[i].disabled = true;
+    }
+    
     // Simular requisição à API
     setTimeout(() => {
         // Aqui você faria a requisição real
         // fetch('/api/login', { method: 'POST', body: JSON.stringify({email, password}) })
         
-        // Simulando sucesso
-        showSuccess('Login realizado com sucesso!');
-        
-        // Redirecionar para a página principal após login
-        setTimeout(() => {
-            window.location.href = '../';
-        }, 1500);
-        
-        // Restaurar botão
-        loginBtn.innerHTML = originalText;
-        loginBtn.disabled = false;
+        // Simulando sucesso (você deve remover isso em produção)
+        if (email === 'admin' && password === 'admin123') {
+            showSuccess('Login realizado com sucesso!');
+            
+            // Salvar no localStorage se "Lembrar-me" estiver marcado
+            if (remember) {
+                localStorage.setItem('rememberedEmail', email);
+            }
+            
+            // Redirecionar para a página principal após login
+            setTimeout(() => {
+                window.location.href = '../';
+            }, 1500);
+        } else {
+            // Simulação de falha
+            showError('E-mail/senha incorretos. Tente novamente.');
+            
+            // Restaurar botão e elementos
+            loginBtn.innerHTML = originalText;
+            loginBtn.disabled = false;
+            for (let i = 0; i < formElements.length; i++) {
+                formElements[i].disabled = false;
+            }
+        }
     }, 2000);
 }
 
@@ -178,33 +202,17 @@ function showSuccess(message) {
     }, 3000);
 }
 
-// Login com Google
-document.querySelector('.google-btn').addEventListener('click', function() {
-    // Aqui você implementaria a autenticação com Google
-    showSuccess('Redirecionando para o Google...');
-    // window.location.href = '/auth/google';
-});
-
-// Login com Facebook
-document.querySelector('.facebook-btn').addEventListener('click', function() {
-    // Aqui você implementaria a autenticação com Facebook
-    showSuccess('Redirecionando para o Facebook...');
-    // window.location.href = '/auth/facebook';
-});
-
-// Efeitos de hover nos botões sociais
-socialButtons.forEach(button => {
-    button.addEventListener('mousedown', function() {
-        this.style.transform = 'scale(0.98)';
-    });
+// Preencher campo de email se estiver salvo no localStorage
+window.addEventListener('DOMContentLoaded', function() {
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    if (rememberedEmail) {
+        document.getElementById('email').value = rememberedEmail;
+        document.getElementById('remember').checked = true;
+    }
     
-    button.addEventListener('mouseup', function() {
-        this.style.transform = '';
-    });
-    
-    button.addEventListener('mouseleave', function() {
-        this.style.transform = '';
-    });
+    // Adicionar animação de entrada
+    const loginCard = document.querySelector('.login-card');
+    loginCard.style.animation = 'fadeIn 0.5s ease-out';
 });
 
 // Adicionar animação CSS
@@ -220,11 +228,31 @@ style.textContent = `
             transform: translateY(0);
         }
     }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 `;
 document.head.appendChild(style);
 
-// Preencher campos automaticamente (apenas para testes)
-if (window.location.href.includes('test')) {
-    document.getElementById('email').value = 'usuario@exemplo.com';
-    passwordInput.value = 'senha123';
-}
+// Foco automático no campo de email
+setTimeout(() => {
+    document.getElementById('email').focus();
+}, 300);
+
+// Melhorias para teclado virtual em mobile
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('focus', function() {
+        // Rolar para o input em foco em dispositivos móveis
+        if (window.innerHeight < 700) {
+            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+});
