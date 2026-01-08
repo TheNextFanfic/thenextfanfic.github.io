@@ -17,6 +17,9 @@
         <h1>The Next Fanfic</h1>
     </header>
     
+    <!-- container global de feedback para acessibilidade -->
+    <div id="form-feedback" aria-live="polite" class="sr-only" style="position: absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;"></div>
+    
     <main>
         <div class="login-container">
             <div class="login-card">
@@ -28,7 +31,7 @@
                     <h2>Entrar na sua conta</h2>
                 </div>
                 
-                <form id="loginForm" class="login-form">
+                <form id="loginForm" class="login-form" novalidate aria-describedby="form-feedback">
                     <div class="input-group">
                         <label for="email">E-mail ou Usuário</label>
                         <div class="input-with-icon">

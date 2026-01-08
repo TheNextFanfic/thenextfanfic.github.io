@@ -3,6 +3,147 @@ const showPassword = document.getElementById('showPassword');
 const passwordInput = document.getElementById('password');
 const backBtn = document.querySelector('.back-btn');
 
+// --- Função REAL de login (fetch) ---
+async function realLogin(email, password, remember) {
+  const loginBtn = loginForm.querySelector('.login-btn');
+  const originalText = loginBtn.innerHTML;
+  
+  loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+  loginBtn.disabled = true;
+  
+  // Desabilita todos os campos do formulário durante o login
+  const formElements = loginForm.elements;
+  for (let i = 0; i < formElements.length; i++) {
+    formElements[i].disabled = true;
+  }
+
+  try {
+    const response = await fetch(
+      'https://thenextfanfic.pythonanywhere.com/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || 'Erro ao entrar');
+    }
+
+    showSuccess(data.message || 'Login realizado com sucesso!');
+
+    if (remember) {
+      localStorage.setItem('rememberedEmail', email);
+    }
+
+    if ('vibrate' in navigator) {
+      navigator.vibrate([100, 50, 100]);
+    }
+
+    setTimeout(() => {
+      window.location.href = '../';
+    }, 1200);
+
+  } catch (err) {
+    showError(err.message || 'Erro de conexão');
+
+    // Restaura o botão
+    loginBtn.innerHTML = originalText;
+    loginBtn.disabled = false;
+    
+    // Reabilita todos os campos do formulário
+    for (let i = 0; i < formElements.length; i++) {
+      formElements[i].disabled = false;
+    }
+
+    if ('vibrate' in navigator) {
+      navigator.vibrate([200, 100, 200]);
+    }
+  }
+}
+
+// --- Helpers para erro por campo ---
+function setFieldError(input, title, message) {
+  clearFieldError(input);
+
+  input.classList.add('invalid');
+  input.setAttribute('aria-invalid', 'true');
+
+  const error = document.createElement('div');
+  error.className = 'field-error';
+  error.innerHTML = `
+    <i class="fas fa-exclamation-circle"></i>
+    <div class="err-body">
+      <span class="err-title">${escapeHtml(title)}</span>
+      <span class="err-text">${escapeHtml(message)}</span>
+    </div>
+  `;
+
+  const parent = input.closest('.input-group') || input.parentElement;
+  parent.appendChild(error);
+
+  // ⏱️ aguarda 2s e anima VOLTANDO ao campo
+  setTimeout(() => {
+    error.style.animation = 'fieldErrorOut 0.25s ease forwards';
+
+    // input acompanha a volta
+    input.style.transition = 'transform 0.25s ease';
+    input.style.transform = 'translateY(-2px)';
+
+    setTimeout(() => {
+      if (error.parentNode) error.remove();
+      input.classList.remove('invalid');
+      input.removeAttribute('aria-invalid');
+      input.style.transform = '';
+    }, 250);
+  }, 2000);
+}
+
+function clearFieldError(input) {
+  input.classList.remove('invalid');
+  input.removeAttribute('aria-invalid');
+  input.style.transform = '';
+  const parent = input.closest('.input-group') || input.parentElement;
+  const existing = parent.querySelector('.field-error');
+  if (existing) existing.remove();
+}
+
+// proteção básica (evita injeção)
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, function(m) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+  });
+}
+
+// ✅ Limpar erro ao digitar (mantém fluidez)
+document.querySelectorAll('#loginForm input').forEach(input => {
+  input.addEventListener('input', () => clearFieldError(input));
+});
+
+// Configura validação em tempo real para campos obrigatórios
+document.querySelectorAll('#loginForm input[required]').forEach(input => {
+  // quando usuário digita, limpa o erro (já temos acima, mas mantemos para consistência)
+  input.addEventListener('input', () => clearFieldError(input));
+
+  // se algum script disparar invalid, prevenimos tooltip nativo e mostramos o nosso
+  input.addEventListener('invalid', (e) => {
+    e.preventDefault(); // evita tooltip nativo
+    // mensagens personalizadas por campo
+    if (input.id === 'email') {
+      setFieldError(input, 'Preencha o e-mail ou usuário', 'Insira um e-mail válido (ex: voce@exemplo.com) ou nome de usuário (mín. 3 caracteres).');
+    } else if (input.id === 'password') {
+      setFieldError(input, 'Senha necessária', 'Digite sua senha. Mínimo 6 caracteres.');
+    } else {
+      setFieldError(input, 'Campo obrigatório', 'Este campo não pode ficar vazio.');
+    }
+  });
+});
+
 // Função para adicionar animação de clique em qualquer elemento
 function addClickAnimation(element) {
     if (!element) return;
@@ -104,82 +245,51 @@ backBtn.addEventListener('click', function(e) {
 });
 
 loginForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const email = document.getElementById('email').value.trim();
-    const password = passwordInput.value.trim();
-    const remember = document.getElementById('remember').checked;
-    
-    document.activeElement.blur();
-    
-    if (!email) {
-        showError('Por favor, insira seu e-mail ou usuário');
-        shakeElement(document.getElementById('email').parentElement);
-        return;
-    }
-    
-    if (!password) {
-        showError('Por favor, insira sua senha');
-        shakeElement(passwordInput.parentElement);
-        return;
-    }
-    
-    if (password.length < 6) {
-        showError('A senha deve ter pelo menos 6 caracteres');
-        shakeElement(passwordInput.parentElement);
-        return;
-    }
-    
-    if (!email.includes('@') && !/^[a-zA-Z0-9_]{3,}$/.test(email)) {
-        showError('Por favor, insira um e-mail válido ou nome de usuário (mínimo 3 caracteres)');
-        shakeElement(document.getElementById('email').parentElement);
-        return;
-    }
-    
-    simulateLogin(email, password, remember);
-});
+  e.preventDefault();
 
-function simulateLogin(email, password, remember) {
-    const loginBtn = loginForm.querySelector('.login-btn');
-    const originalText = loginBtn.innerHTML;
-    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
-    loginBtn.disabled = true;
-    
-    const formElements = loginForm.elements;
-    for (let i = 0; i < formElements.length; i++) {
-        formElements[i].disabled = true;
-    }
-    
-    setTimeout(() => {
-        if (email === 'admin' && password === 'admin123') {
-            showSuccess('Login realizado com sucesso!');
-            
-            if (remember) {
-                localStorage.setItem('rememberedEmail', email);
-            }
-            
-            if ('vibrate' in navigator) {
-                navigator.vibrate([100, 50, 100]);
-            }
-            
-            setTimeout(() => {
-                window.location.href = '../';
-            }, 1500);
-        } else {
-            showError('E-mail/senha incorretos. Tente novamente.');
-            
-            if ('vibrate' in navigator) {
-                navigator.vibrate([200, 100, 200]);
-            }
-            
-            loginBtn.innerHTML = originalText;
-            loginBtn.disabled = false;
-            for (let i = 0; i < formElements.length; i++) {
-                formElements[i].disabled = false;
-            }
-        }
-    }, 1500);
-}
+  // limpa erros anteriores
+  document.querySelectorAll('.field-error').forEach(el => el.remove());
+  document.querySelectorAll('input.invalid').forEach(i => {
+    i.classList.remove('invalid');
+    i.removeAttribute('aria-invalid');
+    i.style.transform = '';
+  });
+
+  const emailInput = document.getElementById('email');
+  const email = emailInput.value.trim();
+  const passwordInput = document.getElementById('password');
+  const password = passwordInput.value.trim();
+  const remember = document.getElementById('remember').checked;
+
+  document.activeElement.blur();
+
+  if (!email) {
+    setFieldError(emailInput, 'Campo obrigatório', 'Por favor, insira seu e-mail ou usuário.');
+    shakeElement(emailInput.parentElement || emailInput);
+    return;
+  }
+
+  if (!password) {
+    setFieldError(passwordInput, 'Campo obrigatório', 'Por favor, informe sua senha.');
+    shakeElement(passwordInput.parentElement || passwordInput);
+    return;
+  }
+
+  if (password.length < 6) {
+    setFieldError(passwordInput, 'Senha fraca', 'A senha deve ter pelo menos 6 caracteres.');
+    shakeElement(passwordInput.parentElement || passwordInput);
+    return;
+  }
+
+  if (!email.includes('@') && !/^[a-zA-Z0-9_]{3,}$/.test(email)) {
+    setFieldError(emailInput, 'E-mail ou usuário inválido', 'Insira um e-mail válido ou um nome de usuário com pelo menos 3 caracteres.');
+    shakeElement(emailInput.parentElement || emailInput);
+    return;
+  }
+
+  // se passou nas validações mostramos status de login
+  realLogin(email, password, remember); // ← Alterado de simulateLogin para realLogin
+});
 
 function showError(message) {
     const existingError = document.querySelector('.error-message');

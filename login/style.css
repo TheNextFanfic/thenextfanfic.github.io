@@ -403,3 +403,95 @@ main {
         margin-bottom: 20px;
     }
 }
+
+/* ===============================
+   ERRO DE CAMPO – ANIMADO
+================================ */
+
+.field-error {
+  display: flex;
+  gap: 12px;
+  align-items: center; /* 👈 ícone CENTRALIZADO verticalmente */
+  background: linear-gradient(90deg, rgba(255,80,80,0.08), rgba(255,80,80,0.03));
+  border: 1px solid rgba(255,80,80,0.2);
+  color: #ffdede;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+
+  /* animação inicial */
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  animation: fieldErrorIn 0.25s ease forwards;
+}
+
+/* corpo do texto */
+.field-error .err-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* título */
+.field-error .err-title {
+  font-weight: 700;
+  color: #ff8a8a;
+  font-size: 0.95rem;
+}
+
+/* texto */
+.field-error .err-text {
+  font-size: 0.86rem;
+  opacity: 0.95;
+}
+
+/* ícone centralizado na caixa */
+.field-error i {
+  font-size: 1.25rem;
+  min-width: 22px;
+  text-align: center;
+  align-self: center; /* 👈 garante centro vertical */
+  color: #ff6b6b;
+}
+
+/* animação de entrada */
+@keyframes fieldErrorIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* animação de saída */
+@keyframes fieldErrorOut {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+}
+
+/* ===============================
+   INPUT SE MOVENDO JUNTO
+================================ */
+
+.input-with-icon input.invalid {
+  border-color: rgba(255,80,80,0.7);
+  box-shadow: 0 0 0 4px rgba(255,80,80,0.08);
+  animation: inputErrorIn 0.25s ease;
+}
+
+@keyframes inputErrorIn {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* utilitário esconder para leitor de tela (opcional) */
+.sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
