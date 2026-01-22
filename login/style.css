@@ -12,7 +12,6 @@
     user-select: none;
 }
 
-/* Permitir seleção apenas nos inputs */
 input, textarea {
     -webkit-user-select: text;
     -khtml-user-select: text;
@@ -45,6 +44,7 @@ button {
     justify-content: space-between;
     min-height: 60px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
 }
 
 .top-header h1 {
@@ -117,11 +117,12 @@ main {
     box-shadow: 0 8px 25px rgba(230, 174, 181, 0.1);
     border: 1px solid rgba(230, 174, 181, 0.1);
     margin-bottom: 20px;
+    padding-top: 30px;
 }
 
 .logo {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .logo svg {
@@ -130,15 +131,60 @@ main {
     stroke: #f2c6cc;
     fill: none;
     stroke-width: 2;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     display: block;
-    margin: 0 auto 15px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .logo h2 {
     font-size: 1.6rem;
     color: #f5e4e7;
     font-weight: 600;
+}
+
+.form-global-message {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 0 20px 0;
+    pointer-events: auto;
+    z-index: 9998;
+}
+
+.form-global-message .error-message,
+.form-global-message .success-message,
+.form-global-message .info-message {
+    width: calc(100% - 20px);
+    max-width: 520px;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.form-global-message i { 
+    font-size: 1.1rem; 
+    min-width: 22px; 
+    text-align: center; 
+}
+
+.no-scroll {
+    overflow: hidden !important;
+}
+
+.no-scroll main {
+    overflow: hidden !important;
+}
+
+.form-global-message.sr-only { 
+    position: relative; 
+    height: 0; 
+    overflow: hidden; 
+    padding: 0; 
 }
 
 .login-form {
@@ -346,6 +392,53 @@ main {
     20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 
+.field-popup {
+    min-width: 240px;
+    max-width: 92%;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(255,80,80,0.10), rgba(255,80,80,0.03));
+    border: 1px solid rgba(255,80,80,0.25);
+    color: #ffdede;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    z-index: 9999;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    transform: translateY(-6px) scale(0.98);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.field-popup .err-body { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 4px; 
+}
+
+.field-popup .err-title { 
+    font-weight: 700; 
+    color: #ff8a8a; 
+    font-size: 0.95rem; 
+}
+
+.field-popup .err-text { 
+    font-size: 0.88rem; 
+    opacity: 0.95; 
+}
+
+.field-popup i { 
+    font-size: 1.2rem; 
+    min-width: 22px; 
+    text-align: center; 
+    color: #ff6b6b; 
+}
+
+.input-with-icon input.invalid {
+    border-color: rgba(255,80,80,0.8);
+    box-shadow: 0 0 0 6px rgba(255,80,80,0.06);
+}
+
 @media (max-width: 480px) {
     .top-header {
         padding: 12px 16px;
@@ -357,6 +450,17 @@ main {
     
     .login-card {
         padding: 25px 20px;
+        padding-top: 25px;
+    }
+    
+    .logo {
+        margin-bottom: 20px;
+    }
+    
+    .logo svg {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px;
     }
     
     .logo h2 {
@@ -368,11 +472,23 @@ main {
         align-items: flex-start;
         gap: 15px;
     }
+    
+    .field-popup { 
+        min-width: 200px; 
+        font-size: 0.88rem; 
+        padding: 8px 12px; 
+        border-radius: 10px; 
+    }
+    
+    .form-global-message {
+        padding: 0 0 15px 0;
+    }
 }
 
 @media (max-height: 700px) {
     .login-card {
         padding: 20px;
+        padding-top: 20px;
     }
     
     .logo svg {
@@ -383,7 +499,10 @@ main {
     
     .logo h2 {
         font-size: 1.4rem;
-        margin-bottom: 20px;
+    }
+    
+    .logo {
+        margin-bottom: 18px;
     }
     
     .input-group {
@@ -402,96 +521,20 @@ main {
         padding: 14px;
         margin-bottom: 20px;
     }
+    
+    .form-global-message {
+        padding: 0 0 12px 0;
+    }
 }
 
-/* ===============================
-   ERRO DE CAMPO – ANIMADO
-================================ */
-
-.field-error {
-  display: flex;
-  gap: 12px;
-  align-items: center; /* 👈 ícone CENTRALIZADO verticalmente */
-  background: linear-gradient(90deg, rgba(255,80,80,0.08), rgba(255,80,80,0.03));
-  border: 1px solid rgba(255,80,80,0.2);
-  color: #ffdede;
-  padding: 10px 14px;
-  border-radius: 10px;
-  margin-top: 10px;
-  font-size: 0.9rem;
-
-  /* animação inicial */
-  opacity: 0;
-  transform: translateY(-8px) scale(0.98);
-  animation: fieldErrorIn 0.25s ease forwards;
+.sr-only { 
+    position: absolute !important; 
+    width: 1px !important; 
+    height: 1px !important; 
+    padding: 0 !important; 
+    margin: -1px !important; 
+    overflow: hidden !important; 
+    clip: rect(0,0,0,0) !important; 
+    white-space: nowrap !important; 
+    border: 0 !important; 
 }
-
-/* corpo do texto */
-.field-error .err-body {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-/* título */
-.field-error .err-title {
-  font-weight: 700;
-  color: #ff8a8a;
-  font-size: 0.95rem;
-}
-
-/* texto */
-.field-error .err-text {
-  font-size: 0.86rem;
-  opacity: 0.95;
-}
-
-/* ícone centralizado na caixa */
-.field-error i {
-  font-size: 1.25rem;
-  min-width: 22px;
-  text-align: center;
-  align-self: center; /* 👈 garante centro vertical */
-  color: #ff6b6b;
-}
-
-/* animação de entrada */
-@keyframes fieldErrorIn {
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* animação de saída */
-@keyframes fieldErrorOut {
-  to {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.96);
-  }
-}
-
-/* ===============================
-   INPUT SE MOVENDO JUNTO
-================================ */
-
-.input-with-icon input.invalid {
-  border-color: rgba(255,80,80,0.7);
-  box-shadow: 0 0 0 4px rgba(255,80,80,0.08);
-  animation: inputErrorIn 0.25s ease;
-}
-
-@keyframes inputErrorIn {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-2px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-/* utilitário esconder para leitor de tela (opcional) */
-.sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
